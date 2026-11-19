@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Genoarch</title>
+<meta name="description" content="Genoarch ranks candidate diseases and genes for undiagnosed cases from HPO phenotype terms, with calibrated confidence, an abstain signal, next-phenotype suggestions and gene hypotheses. Research use only.">
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&amp;family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&amp;display=swap">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="masthead">
+  <a class="brand" href="#home" aria-label="Genoarch home">
+    <svg class="brand-mark" viewBox="0 0 40 28" aria-hidden="true"><path d="M3 27V17a17 17 0 0 1 34 0v10h-7V17a10 10 0 0 0-20 0v10z"/><path class="key" d="M17 1.2h6l-.9 6.6h-4.2z"/></svg>
+    <span>Genoarch</span>
+  </a>
+  <nav class="nav" aria-label="Main">
+    <a href="#analyze" data-route="analyze">Analyze</a>
+    <a href="#method" data-route="method">Method</a>
+    <a href="#pricing" data-route="pricing">Pricing</a>
+    <a href="#about" data-route="about">About</a>
+    <a href="#legal" data-route="legal">Legal</a>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+<!-- HOME -->
+<section class="view" data-view="home" aria-labelledby="home-title">
+  <div class="hero">
+    <div class="hero-copy">
+      <h1 id="home-title">Rank candidate genes from a patient’s phenotypes, and see how sure the ranking is.</h1>
+      <p class="lede">Genoarch compares Human Phenotype Ontology terms with every disease profile in its index of HPO annotations, turns the match into a calibrated probability over diseases and genes, and tells you when no known disease fits better than chance.</p>
+      <p class="actions"><a class="button primary" href="#analyze">Analyze a patient</a> <a class="button" href="#method">Read the method</a></p>
+      <p class="data-line" id="home-data-line">Loading the HPO index…</p>
+    </div>
+    <figure class="hero-figure">
+      <div class="arch-wrap" id="hero-arch" aria-live="polite"></div>
+      <figcaption id="hero-caption">Worked example: a Marfan-like set of five phenotypes, analyzed in this browser.</figcaption>
+    </figure>
+  </div>
+  <div class="features">
+    <div class="feature"><h2>Ranked genes and diseases</h2><p>Resnik best-match similarity over HPO annotations of OMIM, Orphanet and DECIPHER diseases, aggregated to genes.</p></div>
+    <div class="feature"><h2>Confidence you can check</h2><p>Probabilities are temperature-calibrated on held-out Phenopacket Store cases. A permutation test flags phenotype sets that no known disease explains.</p></div>
+    <div class="feature"><h2>The next phenotype to examine</h2><p>Suggestions ranked by expected information gain over the current ranking. Mark the answer and the ranking updates.</p></div>
+    <div class="feature"><h2>Gene hypotheses</h2><p>Genes outside the top diseases that share specific phenotypes with the patient, listed with the matching terms.</p></div>
+  </div>
+  <ol class="steps" aria-label="How an analysis runs">
+    <li><h3>Enter phenotypes</h3><p>Search HPO terms by name, synonym or id and mark each one present or absent.</p></li>
+    <li><h3>Compare with annotations</h3><p>Each term is matched to its most informative shared ancestor in every disease profile.</p></li>
+    <li><h3>Read the ranking and its uncertainty</h3><p>Calibrated confidence, entropy, the abstain test and the evidence behind each match.</p></li>
+  </ol>
+</section>
+
+<!-- ANALYZE -->
+<section class="view" data-view="analyze" aria-labelledby="analyze-title" hidden>
+  <h1 id="analyze-title" class="view-title">Analyze a patient</h1>
+  <p class="ruo-inline">Research use only. Not a medical device. Not for diagnosis or treatment decisions.</p>
+  <div class="workspace">
+    <aside class="patient" aria-label="Patient phenotypes">
+      <div class="search">
+        <label for="term-search">Add an HPO term</label>
+        <input id="term-search" type="search" autocomplete="off" spellcheck="false" placeholder="e.g. arachnodactyly, HP:0001166"
+               role="combobox" aria-expanded="false" aria-controls="term-results" aria-autocomplete="list">
+        <ul id="term-results" class="suggest" role="listbox" hidden></ul>
+      </div>
+      <div class="terms-head"><h2>Phenotypes</h2><span id="term-count" class="muted"></span></div>
+      <ul id="term-list" class="term-list" aria-live="polite"></ul>
+      <p id="term-empty" class="empty" hidden>Add at least one present phenotype to start the analysis.</p>
+      <div class="examples">
+        <h3>Examples</h3>
+        <div class="example-buttons" id="example-buttons"></div>
+        <button type="button" class="link-button" id="clear-terms">Clear all phenotypes</button>
+      </div>
+      <details class="settings">
+        <summary>Settings</summary>
+        <fieldset>
+          <legend>Disease sources</legend>
+          <label><input type="radio" name="universe" value="all" id="u-all"> OMIM, Orphanet and DECIPHER</label>
+          <label><input type="radio" name="universe" value="omim" id="u-omim"> OMIM and DECIPHER</label>
+        </fieldset>
+        <label for="mode-select">Similarity</label>
+        <select id="mode-select">
+          <option value="blended">Blended best-match average (default)</option>
+          <option value="asymmetric">Patient-to-disease best-match average</option>
+          <option value="symmetric">Symmetric best-match average</option>
+        </select>
+        <label for="beta-input">Weight of absent phenotypes</label>
+        <input id="beta-input" type="number" min="0" max="10" step="0.05">
+        <label for="null-select">Permutation test size</label>
+        <select id="null-select">
+          <option value="0">Off</option><option value="50">50 random patients</option>
+          <option value="100">100 random patients</option><option value="200">200 random patients</option>
+        </select>
+        <div id="engine-switch" hidden>
+          <label for="engine-select">Compute with</label>
+          <select id="engine-select"><option value="browser">This browser</option><option value="server">Genoarch server API</option></select>
+        </div>
+        <button type="button" class="link-button" id="reset-settings">Restore fitted settings</button>
+      </details>
+      <div id="excluded-box" hidden>
+        <h3>Ruled out</h3>
+        <ul id="excluded-list" class="chips"></ul>
+      </div>
+    </aside>
+
+    <div class="results" aria-label="Results">
+      <p id="status" class="status" role="status">Loading the HPO index…</p>
+      <div id="results" hidden>
+        <div class="summary">
+          <div class="arch-wrap small" id="result-arch"></div>
+          <div class="verdicts" id="verdicts"></div>
+        </div>
+        <div class="rank-grid">
+          <section aria-labelledby="genes-title"><h2 id="genes-title">Genes</h2><ol id="gene-list" class="rank-list"></ol></section>
+          <section aria-labelledby="diseases-title"><h2 id="diseases-title">Diseases</h2><ol id="disease-list" class="rank-list"></ol></section>
+        </div>
+        <section aria-labelledby="next-title" class="block">
+          <h2 id="next-title">Phenotypes to examine next</h2>
+          <p class="muted">Ranked by expected information gain over the current disease ranking. Recording the answer updates the analysis.</p>
+          <ol id="next-list" class="next-list"></ol>
+        </section>
+        <section aria-labelledby="hyp-title" class="block">
+          <h2 id="hyp-title">Gene hypotheses</h2>
+          <p class="muted">Genes not linked to the top ten diseases whose known phenotypes match at least two specific patient terms. These are leads for follow-up, not established associations.</p>
+          <ol id="hyp-list" class="hyp-list"></ol>
+        </section>
+        <section aria-labelledby="ev-title" class="block">
+          <h2 id="ev-title">Evidence</h2>
+          <p class="muted" id="ev-sub"></p>
+          <div class="table-scroll"><table class="evidence" id="ev-table"></table></div>
+        </section>
+        <p class="copy-row"><button type="button" class="button" id="copy-json">Copy results as JSON</button> <span id="copy-note" class="muted" role="status"></span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METHOD -->
+<section class="view prose-view" data-view="method" aria-labelledby="method-title" hidden>
+  <h1 id="method-title" class="view-title">Method card</h1>
+  <div id="method-body"><p class="status">Loading the method card…</p></div>
+</section>
+
+<!-- PRICING -->
+<section class="view" data-view="pricing" aria-labelledby="pricing-title" hidden>
+  <h1 id="pricing-title" class="view-title">Pricing</h1>
+  <p class="notice">Plans are not yet available. During the research preview every feature on this site is free, and no payment is taken.</p>
+  <div class="plans">
+    <div class="plan"><h2>Free</h2><p class="who">For trying Genoarch on public data</p>
+      <ul><li>In-browser analysis, nothing uploaded</li><li>HPO search, ranking, uncertainty and evidence</li><li>Next-phenotype suggestions and gene hypotheses</li></ul>
+      <p class="price">Free</p><button type="button" class="button" disabled>Coming soon</button></div>
+    <div class="plan"><h2>Researcher</h2><p class="who">For individual investigators</p>
+      <ul><li>Saved projects and case history</li><li>Exports of rankings and evidence</li><li>API access with a monthly quota</li></ul>
+      <p class="price">Price to be announced</p><button type="button" class="button" disabled>Coming soon</button></div>
+    <div class="plan"><h2>Team</h2><p class="who">For labs and undiagnosed-disease programmes</p>
+      <ul><li>Shared workspaces and comments</li><li>Single sign-on</li><li>Higher API limits</li></ul>
+      <p class="price">Price to be announced</p><button type="button" class="button" disabled>Coming soon</button></div>
+    <div class="plan"><h2>Enterprise</h2><p class="who">For pharmaceutical and biotech teams</p>
+      <ul><li>Private deployment and data connectors</li><li>Validation support and audit logs</li><li>Service-level agreement</li></ul>
+      <p class="price">Contact us when plans open</p><button type="button" class="button" disabled>Coming soon</button></div>
+  </div>
+  <p class="muted">Checkout buttons are placeholders. Payments will be handled by Stripe once plans launch; this site contains no payment code.</p>
+</section>
+
+<!-- ABOUT -->
+<section class="view prose-view" data-view="about" aria-labelledby="about-title" hidden>
+  <h1 id="about-title" class="view-title">About Genoarch</h1>
+  <div class="prose">
+    <p>Genoarch is a research tool for undiagnosed disease work. It turns a patient’s phenotype description, written in Human Phenotype Ontology terms, into ranked candidate diseases and genes, states how confident that ranking is, and suggests what to examine next.</p>
+    <p>The analysis engine is open source under the MIT license. The same engine runs in Python behind the API and in JavaScript in this page, and both give the same ranking for the same input.</p>
+    <h2>Contact</h2>
+    <p>Genoarch will live at genoarch.ai (domain not yet registered). Until then, use the issue tracker of the source repository.</p>
+    <p><a href="https://github.com/ilkimaydar/genoarch">github.com/ilkimaydar/genoarch</a></p>
+    <h2>Acknowledgements</h2>
+    <p>Phenotype annotations come from the Human Phenotype Ontology project. Calibration and evaluation use the GA4GH Phenopacket Store. See Legal for sources and licenses.</p>
+  </div>
+</section>
+
+<!-- LEGAL -->
+<section class="view prose-view" data-view="legal" aria-labelledby="legal-title" hidden>
+  <h1 id="legal-title" class="view-title">Legal</h1>
+  <div class="prose">
+    <h2>Research use only</h2>
+    <p class="ruo-strong">Genoarch is not a medical device. It is not intended for diagnosis, treatment, screening or any clinical decision, and its output must not be used to make or confirm a diagnosis.</p>
+    <p>Rankings reflect similarity between phenotype terms and published annotations. They can be wrong, incomplete or biased by gaps in the annotation data. Gene hypotheses are leads for research, not evidence of causality. The reported accuracy and calibration come from solved phenopacket cases (Phenopacket Store 0.1.27) used as a retrospective proxy for undiagnosed cases; no open cohort of truly undiagnosed patients is available to us, so these figures describe solved, published cases.</p>
+    <h2>No warranty</h2>
+    <p>The software is provided under the MIT license, “as is”, without warranty of any kind.</p>
+    <h2>Privacy</h2>
+    <p>In this page the analysis runs entirely in your browser: the phenotype terms you enter are not sent anywhere. The page loads its typefaces from Google Fonts. When the optional server mode is used, terms are sent to the Genoarch API for the request only and are not stored by the application.</p>
+    <h2>Data sources</h2>
+    <p>This product uses the Human Phenotype Ontology (<a href="https://hpo.jax.org">hpo.jax.org</a>). The release versions in use are shown in the page footer and on the Method page. Term labels, synonyms and relationships are used without alteration, as the <a href="https://human-phenotype-ontology.github.io/license.html">HPO license terms</a> require.</p>
+    <ul>
+      <li>Human Phenotype Ontology and HPO annotations, used unchanged.</li>
+      <li>Disease identifiers and names from OMIM, Orphanet and DECIPHER as distributed in the HPO annotation file.</li>
+      <li>GA4GH Phenopacket Store, used only to fit and evaluate calibration; no case data is included in this site.</li>
+    </ul>
+    <h2>AI-use disclosure</h2>
+    <p id="ai-disclosure">Genoarch code, documentation and evaluation scripts were written with assistance from an AI model (Anthropic Claude) under the direction of the project owner. All reported numbers come from logged runs.</p>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <p class="ruo-footer">Research use only. Not a medical device. Not for diagnosis.</p>
+  <p class="muted" id="footer-versions">Genoarch engine 0.1.0</p>
+</footer>
+<script src="js/engine.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
