@@ -1,0 +1,105 @@
+format-version: 1.2
+data-version: hp/releases/2026-01-01
+ontology: hp
+
+[Term]
+id: HP:0000001
+name: All
+
+[Term]
+id: HP:0000005
+name: Mode of inheritance
+is_a: HP:0000001 ! All
+
+[Term]
+id: HP:0000006
+name: Autosomal dominant inheritance
+is_a: HP:0000005 ! Mode of inheritance
+
+[Term]
+id: HP:0000118
+name: Phenotypic abnormality
+is_a: HP:0000001 ! All
+
+[Term]
+id: HP:0000707
+name: Abnormality of the nervous system
+is_a: HP:0000118 ! Phenotypic abnormality
+
+[Term]
+id: HP:0001250
+name: Seizure
+synonym: "Seizures" EXACT []
+is_a: HP:0000707 ! Abnormality of the nervous system
+
+[Term]
+id: HP:0002373
+name: Febrile seizure
+is_a: HP:0001250 ! Seizure
+
+[Term]
+id: HP:0007359
+name: Focal-onset seizure
+synonym: "Focal seizure" EXACT []
+is_a: HP:0001250 {xref="PMID:1"} ! Seizure
+
+[Term]
+id: HP:0001249
+name: Intellectual disability
+synonym: "Mental retardation" EXACT []
+is_a: HP:0000707 ! Abnormality of the nervous system
+
+[Term]
+id: HP:0000478
+name: Abnormality of the eye
+is_a: HP:0000118 ! Phenotypic abnormality
+
+[Term]
+id: HP:0001083
+name: Ectopia lentis
+alt_id: HP:0009999
+synonym: "Dislocated lens" EXACT []
+is_a: HP:0000478 ! Abnormality of the eye
+
+[Term]
+id: HP:0000545
+name: Myopia
+synonym: "Nearsightedness" EXACT []
+is_a: HP:0000478 ! Abnormality of the eye
+
+[Term]
+id: HP:0033127
+name: Abnormality of the musculoskeletal system
+is_a: HP:0000118 ! Phenotypic abnormality
+
+[Term]
+id: HP:0001166
+name: Arachnodactyly
+synonym: "Long slender fingers" EXACT []
+is_a: HP:0033127 ! Abnormality of the musculoskeletal system
+
+[Term]
+id: HP:0001519
+name: Disproportionate tall stature
+is_a: HP:0033127 ! Abnormality of the musculoskeletal system
+
+[Term]
+id: HP:0002616
+name: Aortic root aneurysm
+is_a: HP:0000118 ! Phenotypic abnormality
+
+[Term]
+id: HP:0004970
+name: Ascending tubular aorta aneurysm
+is_a: HP:0002616 ! Aortic root aneurysm
+is_a: HP:0033127 ! Abnormality of the musculoskeletal system
+
+[Term]
+id: HP:0000999
+name: obsolete Old seizure term
+is_obsolete: true
+replaced_by: HP:0001250
+
+[Typedef]
+id: part_of
+name: part of

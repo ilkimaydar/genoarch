@@ -1,0 +1,22 @@
+#description: "mini test annotations"
+#version: 2026-01-01
+#hpo-version: http://purl.obolibrary.org/obo/hp/releases/2026-01-01/hp.json
+database_id	disease_name	qualifier	hpo_id	reference	evidence	onset	frequency	sex	modifier	aspect	biocuration
+OMIM:100001	Marfan-like A		HP:0001166	PMID:1	PCS		HP:0040281			P	HPO:test[2026-01-01]
+OMIM:100001	Marfan-like A		HP:0001083	PMID:1	PCS		12/20			P	HPO:test[2026-01-01]
+OMIM:100001	Marfan-like A		HP:0000545	PMID:1	PCS					P	HPO:test[2026-01-01]
+OMIM:100001	Marfan-like A		HP:0001519	PMID:1	PCS		HP:0040280			P	HPO:test[2026-01-01]
+OMIM:100001	Marfan-like A		HP:0004970	PMID:1	PCS		1/2			P	HPO:test[2026-01-01]
+OMIM:100001	Marfan-like A		HP:0000006	PMID:1	PCS					I	HPO:test[2026-01-01]
+OMIM:100002	Epilepsy B		HP:0001250	PMID:1	PCS		HP:0040282			P	HPO:test[2026-01-01]
+OMIM:100002	Epilepsy B		HP:0002373	PMID:1	PCS		3/4			P	HPO:test[2026-01-01]
+OMIM:100002	Epilepsy B		HP:0001249	PMID:1	PCS					P	HPO:test[2026-01-01]
+OMIM:100002	Epilepsy B	NOT	HP:0001083	PMID:1	PCS					P	HPO:test[2026-01-01]
+OMIM:100003	Focal epilepsy C		HP:0007359	PMID:1	PCS		HP:0040283			P	HPO:test[2026-01-01]
+OMIM:100003	Focal epilepsy C		HP:0000545	PMID:1	PCS					P	HPO:test[2026-01-01]
+OMIM:100004	Zero frequency E		HP:0001250	PMID:1	PCS		0/5			P	HPO:test[2026-01-01]
+OMIM:100004	Zero frequency E		HP:0000545	PMID:1	PCS		40%			P	HPO:test[2026-01-01]
+ORPHA:200001	Orphan Marfan		HP:0001166	PMID:1	PCS					P	HPO:test[2026-01-01]
+ORPHA:200001	Orphan Marfan		HP:0001083	PMID:1	PCS					P	HPO:test[2026-01-01]
+DECIPHER:1	CNV D		HP:0001249	PMID:1	PCS					P	HPO:test[2026-01-01]
+DECIPHER:1	CNV D		HP:0001519	PMID:1	PCS					P	HPO:test[2026-01-01]
