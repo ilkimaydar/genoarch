@@ -11,8 +11,9 @@ phenotype worth examining, and lists gene-association hypotheses for follow-up.
 * **Website: [ilkimaydar.github.io/genoarch](https://ilkimaydar.github.io/genoarch/)** (GitHub Pages, redeployed from
   `main` by `.github/workflows/pages.yml` on every push).
 * In-browser build (Claude artifact, private to the owner until shared): https://claude.ai/artifact/5r1wD8Pn2ezzAmgU5BNbsS
-* Hugging Face Space `ilkimaydar/genoarch`: not created yet; run the "Publish static build to the Hugging Face
-  Space" workflow after adding the `HF_TOKEN` secret, or upload `dist/hf-space/` (see docs/DEPLOY.md).
+* Hugging Face Space: [huggingface.co/spaces/ilkimaydar/genoarch](https://huggingface.co/spaces/ilkimaydar/genoarch)
+  (static Space; the files of `dist/hf-space/` were uploaded by hand, see docs/DEPLOY.md; the workflow "Publish static
+  build to the Hugging Face Space" stays optional and needs the repository secret `HF_TOKEN`).
 
 ## What it does
 

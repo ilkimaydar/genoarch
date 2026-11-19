@@ -22,7 +22,10 @@ then run the workflow "Publish static build to the Hugging Face Space". It creat
 `sdk: static` if needed and uploads `dist/hf-space`.
 
 Option B, by hand: create a Space named `genoarch` with the Static SDK, then upload the contents of
-`dist/hf-space/` (its `README.md` carries the Space configuration). The Space serves `index.html`.
+`dist/hf-space/` (its `README.md` carries the Space configuration) through the Files tab, one folder at a time:
+the root files, then `css/`, `js/` and `data/`. The Space serves `index.html`. This route was used for the first
+deployment; it needs no token. Build with `make static` from the committed `web/data` files so that the method card
+keeps its reliability bins (see the release checklist).
 
 Option C, container: create a Docker Space and push this repository; the `Dockerfile` listens on port 7860,
 which is the Spaces default.
@@ -87,5 +90,7 @@ After each deploy, purge the cache for `/index.html`, `/js/*` and `/css/*` (or v
 
 1. `make data index calibrate parity static test lint`
 2. Check `dist/eval/parity/parity_report.json` (`all_pass: true`) and the evaluation summary.
-3. Commit `web/data/{index.json.gz,calibration.json,method_card.json}` together with the code.
+3. Commit `web/data/{index.json.gz,calibration.json,method_card.json,eval_reliability.json}` together with the code.
+   After a new evaluation run, build once with `python scripts/build_static.py --eval-summary <run>/summary.json`
+   to refresh `eval_reliability.json`; builds without that option (CI) reuse the committed file.
 4. Push to `main`; Pages deploys automatically; run the Hugging Face workflow.

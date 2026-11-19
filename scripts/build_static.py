@@ -7,6 +7,9 @@
 * dist/genoarch.html         single self-contained page (index, calibration and method card embedded)
 
 Usage: python scripts/build_static.py [--eval-summary ../genoarch_proj/exp/platform_eval/run_X/summary.json]
+
+The reliability bins on the Method page come from web/data/eval_reliability.json. --eval-summary refreshes that file;
+a build without it (CI) reuses the committed file when its key matches the calibration's default configuration.
 """
 from __future__ import annotations
 
@@ -63,10 +66,21 @@ def main() -> int:
     cal = json.loads((data / "calibration.json").read_text())
     kb = read_index(data / "index.json.gz")
     card = method_card(Engine(kb, cal))
+    key = f"{cal['default_mode']}/{cal['default_universe']}"
+    saved = data / "eval_reliability.json"
+    reliability = None
     if args.eval_summary and card.get("evaluation"):
         summary = json.loads(Path(args.eval_summary).read_text())
-        key = f"{cal['default_mode']}/{cal['default_universe']}"
-        card["evaluation"]["reliability_10"] = summary["test_results"][key]["reliability_10"]
+        reliability = summary["test_results"][key]["reliability_10"]
+        saved.write_text(json.dumps({"key": key, "source": f"{args.eval_summary} test_results/{key}/reliability_10",
+                                     "reliability_10": reliability}, indent=1) + "\n")
+    elif saved.exists() and card.get("evaluation"):
+        # CI builds without --eval-summary: use the committed bins, but only for the same default configuration.
+        keep = json.loads(saved.read_text())
+        if keep.get("key") == key:
+            reliability = keep["reliability_10"]
+    if reliability is not None:
+        card["evaluation"]["reliability_10"] = reliability
     (data / "method_card.json").write_text(json.dumps(card, indent=1, ensure_ascii=False) + "\n")
 
     site = out / "site"
