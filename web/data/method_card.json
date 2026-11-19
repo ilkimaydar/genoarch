@@ -1,0 +1,361 @@
+{
+ "name": "Genoarch phenotype-driven disease and gene ranking",
+ "engine_version": "0.1.0",
+ "research_use_only": "Research use only. Genoarch is not a medical device and must not be used for diagnosis, treatment or any clinical decision.",
+ "intended_use": "Research prioritisation of candidate diseases and genes for undiagnosed cases from a set of HPO phenotype terms, with calibrated uncertainty, suggested next phenotypes to examine and gene-association hypotheses.",
+ "not_intended_for": [
+  "clinical diagnosis or treatment decisions",
+  "screening of individuals",
+  "use as a medical device",
+  "variant interpretation (no genotype input in this version)"
+ ],
+ "inputs": "HPO term identifiers marked present or absent (Phenotypic abnormality subtree, HP:0000118). Alternative and obsolete identifiers are mapped to current terms.",
+ "method": {
+  "information_content": "IC(t) = ln(N / n_t), N = annotated diseases in the index, n_t = diseases annotated to t or a descendant.",
+  "similarity": "Resnik: sim(p, D) = max IC of a common ancestor of p and any annotation of D (best match).",
+  "modes": {
+   "asymmetric": "S_PD = mean over patient terms of the best match in the disease (patient -> disease BMA).",
+   "symmetric": "(S_PD + S_DP) / 2, where S_DP = mean over disease annotations of the best match in the patient.",
+   "blended": "(1 - w) S_PD + w S_DP with w fitted on the calibration slice; breaks ties of the asymmetric score."
+  },
+  "absent_terms": "Penalty beta * sum_e IC(e) f_D(e) / |P| where f_D(e) is the highest annotated frequency of e or a descendant in D (unknown frequency = 0.5). beta is fitted on the calibration slice.",
+  "posterior": "softmax(score / T) over the selected disease universe; T fitted by minimum negative log-likelihood of the true disease on the calibration slice (temperature scaling).",
+  "gene_posterior": "P(g) = sum over linked diseases D of P(D) / k(D), k(D) = number of genes linked to D. Mass on diseases without a linked gene is reported as no_known_gene_mass.",
+  "uncertainty": "Top-1 posterior (calibrated confidence), top-1 margin, Shannon entropy (bits and normalised).",
+  "open_world": "Permutation null: each present term is replaced by a random directly-annotated term from the same IC decile (R null patients, seeded). Per-disease scores are standardised by the null mean and variance plus a pooled variance floor (leave-one-out for null patients); statistic = maximum standardised score; abstain when p > alpha.",
+  "next_phenotypes": "Expected information gain (bits) about the disease among the top-K posterior diseases for each curated annotation term not yet answered, under a Bernoulli model P(term | D) = annotated frequency clamped to [eps, q_max], eps for diseases without the term.",
+  "hypotheses": "Genes not linked to any of the top diseases whose known phenotype profile (union of their diseases' annotations) matches at least hyp_min_terms patient terms with IC >= hyp_min_ic. Listed with the matching terms as evidence and labelled as hypotheses.",
+  "universes": {
+   "omim": [
+    "OMIM",
+    "DECIPHER"
+   ],
+   "all": [
+    "OMIM",
+    "DECIPHER",
+    "ORPHA"
+   ]
+  }
+ },
+ "parameters": {
+  "default_mode": "blended",
+  "default_universe": "all",
+  "fitted": {
+   "asymmetric": {
+    "omim": {
+     "T": 0.19002,
+     "beta": 0.0,
+     "w": 0.0
+    },
+    "all": {
+     "T": 0.18215,
+     "beta": 0.0,
+     "w": 0.0
+    }
+   },
+   "blended": {
+    "omim": {
+     "T": 0.172491,
+     "beta": 0.0,
+     "w": 0.1
+    },
+    "all": {
+     "T": 0.173602,
+     "beta": 0.0,
+     "w": 0.05
+    }
+   },
+   "symmetric": {
+    "omim": {
+     "T": 0.196938,
+     "beta": 0.0,
+     "w": 0.5
+    },
+    "all": {
+     "T": 0.203571,
+     "beta": 0.0,
+     "w": 0.5
+    }
+   }
+  },
+  "constants": {
+   "alpha": 0.05,
+   "null_samples": 100,
+   "eps": 0.05,
+   "q_max": 0.99,
+   "eig_top_k": 50,
+   "eig_min_ic": 1.0,
+   "hyp_top_diseases": 10,
+   "hyp_min_ic": 3.0,
+   "hyp_min_terms": 2,
+   "ic_bins": 10
+  },
+  "fitted_on": {
+   "dataset": "Phenopacket Store 0.1.27",
+   "slice": "calibration",
+   "split_rule": "disease-disjoint: int(sha256(disease_id)[:8],16) % 10 < 3",
+   "n_cases": 3619,
+   "n_diseases": 241
+  }
+ },
+ "data": {
+  "hpo_ontology_version": "2026-09-01",
+  "hpo_annotation_version": "2026-09-02",
+  "annotation_description": "HPO annotations for rare diseases [8478: OMIM; 47: DECIPHER; 4357 ORPHANET]",
+  "counts": {
+   "terms": 19178,
+   "diseases": 12865,
+   "genes": 5268,
+   "annotations": 264562
+  },
+  "inputs": {
+   "hp.json": {
+    "sha256": "a7b3a012e7b4007a35a7cf8da35f2373b54cc16907f80d13d62470d31f833501",
+    "bytes": 21915519,
+    "url": "https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2026-09-01/hp.json"
+   },
+   "phenotype.hpoa": {
+    "sha256": "e89aa39c8f97bf5a52c5d160f9250a603681d630ade8ec2679d84ac5aece1f72",
+    "bytes": 35816037,
+    "url": "https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2026-09-01/phenotype.hpoa"
+   },
+   "genes_to_disease.txt": {
+    "sha256": "7937a1b92779dc8614e39ace623b443c7c71dd15e4de11d5e52b14e331ab5978",
+    "bytes": 1492039,
+    "url": "https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2026-09-01/genes_to_disease.txt"
+   },
+   "genes_to_phenotype.txt": {
+    "sha256": "507a17bff9c49e6329fbd88b1f91734fa7e9fdea5c06304044c0892eb6ab248c",
+    "bytes": 20821704,
+    "url": "https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2026-09-01/genes_to_phenotype.txt"
+   }
+  },
+  "evaluation_dataset": "Phenopacket Store 0.1.27 (used only to fit and evaluate; not part of the index)."
+ },
+ "evaluation": {
+  "slice": "test",
+  "n_cases": 6726,
+  "n_diseases": 537,
+  "default_config": {
+   "n_cases": 6726,
+   "n_cases_with_gene_in_index": 6584,
+   "n_diseases": 537,
+   "disease_top1": 0.6129943502824858,
+   "disease_top3": 0.6953612845673506,
+   "disease_top10": 0.764049955396967,
+   "disease_mrr": 0.6669326746674297,
+   "disease_top1_macro": 0.6995243505795393,
+   "gene_top1": 0.6584143377885784,
+   "gene_top3": 0.7372417982989065,
+   "gene_top10": 0.8184993924665857,
+   "gene_mrr": 0.7122613466112008,
+   "nll": 2.771668363423206,
+   "ece_15": 0.11895484832509463,
+   "ece_15_T1": 0.6085583767773033,
+   "brier_top1": 0.15197048242743,
+   "mean_top1_confidence": 0.5007540700525708,
+   "auroc_conf_vs_correct": 0.8907025690706137,
+   "auroc_neg_entropy_vs_correct": 0.8353869101390409,
+   "auroc_margin_vs_correct": 0.8991210909928832,
+   "coverage_conf_ge_0.5": 0.47948260481712757,
+   "accuracy_conf_ge_0.5": 0.9097674418604651,
+   "gene_ece_15": 0.14645848497232478
+  },
+  "all_configs": {
+   "asymmetric/omim": {
+    "disease_top1": 0.6088314005352364,
+    "disease_top10": 0.7716324710080286,
+    "disease_mrr": 0.6659160348657672,
+    "gene_top1": 0.6380358771663119,
+    "gene_top10": 0.7990270598966251,
+    "gene_mrr": 0.692575977718271,
+    "ece_15": 0.10739845065421687,
+    "nll": 2.5488463328241053
+   },
+   "asymmetric/all": {
+    "disease_top1": 0.6013975617008623,
+    "disease_top10": 0.7628605411834671,
+    "disease_mrr": 0.6586536557016942,
+    "gene_top1": 0.6382138517618469,
+    "gene_top10": 0.8093863912515188,
+    "gene_mrr": 0.6957484715089093,
+    "ece_15": 0.12072519729542153,
+    "nll": 2.8129065377286016
+   },
+   "blended/omim": {
+    "disease_top1": 0.6289027653880463,
+    "disease_top10": 0.78040440083259,
+    "disease_mrr": 0.6823767271292046,
+    "gene_top1": 0.6485253876558225,
+    "gene_top10": 0.8119489206445728,
+    "gene_mrr": 0.7055352429647592,
+    "ece_15": 0.10518888791105438,
+    "nll": 2.501906758172407
+   },
+   "blended/all": {
+    "disease_top1": 0.6129943502824858,
+    "disease_top10": 0.764049955396967,
+    "disease_mrr": 0.6669326746674297,
+    "gene_top1": 0.6584143377885784,
+    "gene_top10": 0.8184993924665857,
+    "gene_mrr": 0.7122613466112008,
+    "ece_15": 0.11895484832509463,
+    "nll": 2.771668363423206
+   },
+   "symmetric/omim": {
+    "disease_top1": 0.40440083258994947,
+    "disease_top10": 0.7132024977698483,
+    "disease_mrr": 0.5149934812333915,
+    "gene_top1": 0.46564305259957434,
+    "gene_top10": 0.7579811492854971,
+    "gene_mrr": 0.5702988164371836,
+    "ece_15": 0.13637324539031231,
+    "nll": 3.6202031360577114
+   },
+   "symmetric/all": {
+    "disease_top1": 0.39310139756170087,
+    "disease_top10": 0.6975914362176628,
+    "disease_mrr": 0.5022897938206793,
+    "gene_top1": 0.47509113001215064,
+    "gene_top10": 0.7679222357229648,
+    "gene_mrr": 0.5796240304254062,
+    "ece_15": 0.15741743319047802,
+    "nll": 3.8436024360688066
+   }
+  },
+  "open_world": {
+   "n_cases": 200,
+   "null_samples": 100,
+   "alpha": 0.05,
+   "abstain_rate_in_kb": 0.245,
+   "abstain_rate_gene_removed": 0.285,
+   "abstain_rate_random_patient": 0.96,
+   "median_p_in_kb": 0.009900990099009901,
+   "median_p_gene_removed": 0.009900990099009901,
+   "auroc_p_gene_removed_vs_in_kb": 0.53755
+  },
+  "next_phenotype_simulation": {
+   "protocol": "start from the first half (by term position) of the used present terms, ask the top suggestion; oracle answers present if implied by the full present set, absent if implied by an excluded term, else unknown",
+   "eig_top1": {
+    "n": 192,
+    "answer_present": 46,
+    "answer_absent": 8,
+    "answer_unknown": 138,
+    "mean_log2_rank_gain_when_answered": 0.20708397560976016,
+    "fraction_rank_improved_when_answered": 0.4444444444444444
+   },
+   "random_candidate": {
+    "n": 192,
+    "answer_present": 5,
+    "answer_absent": 10,
+    "answer_unknown": 177,
+    "mean_log2_rank_gain_when_answered": -0.02615449485191735,
+    "fraction_rank_improved_when_answered": 0.06666666666666667
+   }
+  },
+  "log": "exp/platform_eval/run_20261118T224839Z",
+  "reliability_10": [
+   {
+    "bin": [
+     0.0,
+     0.1
+    ],
+    "n": 1620,
+    "mean_conf": 0.03804056296373048,
+    "accuracy": 0.14074074074074075
+   },
+   {
+    "bin": [
+     0.1,
+     0.2
+    ],
+    "n": 722,
+    "mean_conf": 0.1464440705900185,
+    "accuracy": 0.3628808864265928
+   },
+   {
+    "bin": [
+     0.2,
+     0.3
+    ],
+    "n": 465,
+    "mean_conf": 0.24895861538325248,
+    "accuracy": 0.5397849462365591
+   },
+   {
+    "bin": [
+     0.3,
+     0.4
+    ],
+    "n": 332,
+    "mean_conf": 0.3489009911828914,
+    "accuracy": 0.6506024096385542
+   },
+   {
+    "bin": [
+     0.4,
+     0.5
+    ],
+    "n": 362,
+    "mean_conf": 0.4540194973511922,
+    "accuracy": 0.6408839779005525
+   },
+   {
+    "bin": [
+     0.5,
+     0.6
+    ],
+    "n": 351,
+    "mean_conf": 0.5500272101362188,
+    "accuracy": 0.7264957264957265
+   },
+   {
+    "bin": [
+     0.6,
+     0.7
+    ],
+    "n": 251,
+    "mean_conf": 0.6550571592162268,
+    "accuracy": 0.7450199203187251
+   },
+   {
+    "bin": [
+     0.7,
+     0.8
+    ],
+    "n": 309,
+    "mean_conf": 0.7526875784750086,
+    "accuracy": 0.86084142394822
+   },
+   {
+    "bin": [
+     0.8,
+     0.9
+    ],
+    "n": 399,
+    "mean_conf": 0.8511746485463102,
+    "accuracy": 0.9273182957393483
+   },
+   {
+    "bin": [
+     0.9,
+     1.0
+    ],
+    "n": 1915,
+    "mean_conf": 0.9791538155088507,
+    "accuracy": 0.9691906005221932
+   }
+  ]
+ },
+ "limitations": [
+  "Phenotype-only: no variant, segregation or inheritance input; ranks reflect HPO annotation similarity only.",
+  "Knowledge is limited to diseases and gene links annotated in the HPO release; incomplete or biased annotations propagate to the ranking.",
+  "The evaluation uses solved phenopacket cases (Phenopacket Store 0.1.27) as a retrospective proxy for undiagnosed cases; no open cohort of truly undiagnosed patients is available to us, so the reported metrics describe solved, published cases and performance on undiagnosed cohorts is expected to be lower.",
+  "Calibration was fitted on one disease-disjoint slice of Phenopacket Store; confidence values may be miscalibrated for other populations or phenotyping styles.",
+  "The open-world test detects phenotype sets not better matched than random sets of similar specificity; it is not a reliable detector of novel diseases when similar known diseases exist.",
+  "Gene hypotheses are generated from phenotype overlap only and are not evidence of causality.",
+  "OMIM and Orphanet entries for the same condition are not merged in the 'all' universe."
+ ],
+ "license": "Code: MIT (see LICENSE). Data: HPO release files (hpo.jax.org) used unchanged; see docs/DATA_CARD.md.",
+ "ai_use_disclosure": "Genoarch code, documentation and evaluation scripts were written with assistance from an AI model (Anthropic Claude) under the direction of the project owner; all reported numbers come from logged runs."
+}

@@ -1,0 +1,306 @@
+{
+ "graphs": [
+  {
+   "id": "http://purl.obolibrary.org/obo/hp.json",
+   "meta": {
+    "basicPropertyValues": [
+     {
+      "pred": "http://www.w3.org/2002/07/owl#versionInfo",
+      "val": "2026-01-01"
+     }
+    ]
+   },
+   "nodes": [
+    {
+     "id": "http://purl.obolibrary.org/obo/HP_0000001",
+     "lbl": "All",
+     "type": "CLASS",
+     "meta": {
+      "synonyms": [],
+      "basicPropertyValues": []
+     }
+    },
+    {
+     "id": "http://purl.obolibrary.org/obo/HP_0000005",
+     "lbl": "Mode of inheritance",
+     "type": "CLASS",
+     "meta": {
+      "synonyms": [],
+      "basicPropertyValues": []
+     }
+    },
+    {
+     "id": "http://purl.obolibrary.org/obo/HP_0000006",
+     "lbl": "Autosomal dominant inheritance",
+     "type": "CLASS",
+     "meta": {
+      "synonyms": [],
+      "basicPropertyValues": []
+     }
+    },
+    {
+     "id": "http://purl.obolibrary.org/obo/HP_0000118",
+     "lbl": "Phenotypic abnormality",
+     "type": "CLASS",
+     "meta": {
+      "synonyms": [],
+      "basicPropertyValues": []
+     }
+    },
+    {
+     "id": "http://purl.obolibrary.org/obo/HP_0000707",
+     "lbl": "Abnormality of the nervous system",
+     "type": "CLASS",
+     "meta": {
+      "synonyms": [],
+      "basicPropertyValues": []
+     }
+    },
+    {
+     "id": "http://purl.obolibrary.org/obo/HP_0001250",
+     "lbl": "Seizure",
+     "type": "CLASS",
+     "meta": {
+      "synonyms": [
+       {
+        "pred": "hasExactSynonym",
+        "val": "Seizures"
+       }
+      ],
+      "basicPropertyValues": []
+     }
+    },
+    {
+     "id": "http://purl.obolibrary.org/obo/HP_0002373",
+     "lbl": "Febrile seizure",
+     "type": "CLASS",
+     "meta": {
+      "synonyms": [],
+      "basicPropertyValues": []
+     }
+    },
+    {
+     "id": "http://purl.obolibrary.org/obo/HP_0007359",
+     "lbl": "Focal-onset seizure",
+     "type": "CLASS",
+     "meta": {
+      "synonyms": [
+       {
+        "pred": "hasExactSynonym",
+        "val": "Focal seizure"
+       }
+      ],
+      "basicPropertyValues": []
+     }
+    },
+    {
+     "id": "http://purl.obolibrary.org/obo/HP_0001249",
+     "lbl": "Intellectual disability",
+     "type": "CLASS",
+     "meta": {
+      "synonyms": [
+       {
+        "pred": "hasExactSynonym",
+        "val": "Mental retardation"
+       }
+      ],
+      "basicPropertyValues": []
+     }
+    },
+    {
+     "id": "http://purl.obolibrary.org/obo/HP_0000478",
+     "lbl": "Abnormality of the eye",
+     "type": "CLASS",
+     "meta": {
+      "synonyms": [],
+      "basicPropertyValues": []
+     }
+    },
+    {
+     "id": "http://purl.obolibrary.org/obo/HP_0001083",
+     "lbl": "Ectopia lentis",
+     "type": "CLASS",
+     "meta": {
+      "synonyms": [
+       {
+        "pred": "hasExactSynonym",
+        "val": "Dislocated lens"
+       }
+      ],
+      "basicPropertyValues": [
+       {
+        "pred": "http://www.geneontology.org/formats/oboInOwl#hasAlternativeId",
+        "val": "HP:0009999"
+       }
+      ]
+     }
+    },
+    {
+     "id": "http://purl.obolibrary.org/obo/HP_0000545",
+     "lbl": "Myopia",
+     "type": "CLASS",
+     "meta": {
+      "synonyms": [
+       {
+        "pred": "hasExactSynonym",
+        "val": "Nearsightedness"
+       }
+      ],
+      "basicPropertyValues": []
+     }
+    },
+    {
+     "id": "http://purl.obolibrary.org/obo/HP_0033127",
+     "lbl": "Abnormality of the musculoskeletal system",
+     "type": "CLASS",
+     "meta": {
+      "synonyms": [],
+      "basicPropertyValues": []
+     }
+    },
+    {
+     "id": "http://purl.obolibrary.org/obo/HP_0001166",
+     "lbl": "Arachnodactyly",
+     "type": "CLASS",
+     "meta": {
+      "synonyms": [
+       {
+        "pred": "hasExactSynonym",
+        "val": "Long slender fingers"
+       }
+      ],
+      "basicPropertyValues": []
+     }
+    },
+    {
+     "id": "http://purl.obolibrary.org/obo/HP_0001519",
+     "lbl": "Disproportionate tall stature",
+     "type": "CLASS",
+     "meta": {
+      "synonyms": [],
+      "basicPropertyValues": []
+     }
+    },
+    {
+     "id": "http://purl.obolibrary.org/obo/HP_0002616",
+     "lbl": "Aortic root aneurysm",
+     "type": "CLASS",
+     "meta": {
+      "synonyms": [],
+      "basicPropertyValues": []
+     }
+    },
+    {
+     "id": "http://purl.obolibrary.org/obo/HP_0004970",
+     "lbl": "Ascending tubular aorta aneurysm",
+     "type": "CLASS",
+     "meta": {
+      "synonyms": [],
+      "basicPropertyValues": []
+     }
+    },
+    {
+     "id": "http://purl.obolibrary.org/obo/HP_0000999",
+     "lbl": "obsolete Old seizure term",
+     "type": "CLASS",
+     "meta": {
+      "deprecated": true,
+      "basicPropertyValues": [
+       {
+        "pred": "http://purl.obolibrary.org/obo/IAO_0100001",
+        "val": "http://purl.obolibrary.org/obo/HP_0001250"
+       }
+      ]
+     }
+    }
+   ],
+   "edges": [
+    {
+     "sub": "http://purl.obolibrary.org/obo/HP_0000005",
+     "pred": "is_a",
+     "obj": "http://purl.obolibrary.org/obo/HP_0000001"
+    },
+    {
+     "sub": "http://purl.obolibrary.org/obo/HP_0000006",
+     "pred": "is_a",
+     "obj": "http://purl.obolibrary.org/obo/HP_0000005"
+    },
+    {
+     "sub": "http://purl.obolibrary.org/obo/HP_0000118",
+     "pred": "is_a",
+     "obj": "http://purl.obolibrary.org/obo/HP_0000001"
+    },
+    {
+     "sub": "http://purl.obolibrary.org/obo/HP_0000707",
+     "pred": "is_a",
+     "obj": "http://purl.obolibrary.org/obo/HP_0000118"
+    },
+    {
+     "sub": "http://purl.obolibrary.org/obo/HP_0001250",
+     "pred": "is_a",
+     "obj": "http://purl.obolibrary.org/obo/HP_0000707"
+    },
+    {
+     "sub": "http://purl.obolibrary.org/obo/HP_0002373",
+     "pred": "is_a",
+     "obj": "http://purl.obolibrary.org/obo/HP_0001250"
+    },
+    {
+     "sub": "http://purl.obolibrary.org/obo/HP_0007359",
+     "pred": "is_a",
+     "obj": "http://purl.obolibrary.org/obo/HP_0001250"
+    },
+    {
+     "sub": "http://purl.obolibrary.org/obo/HP_0001249",
+     "pred": "is_a",
+     "obj": "http://purl.obolibrary.org/obo/HP_0000707"
+    },
+    {
+     "sub": "http://purl.obolibrary.org/obo/HP_0000478",
+     "pred": "is_a",
+     "obj": "http://purl.obolibrary.org/obo/HP_0000118"
+    },
+    {
+     "sub": "http://purl.obolibrary.org/obo/HP_0001083",
+     "pred": "is_a",
+     "obj": "http://purl.obolibrary.org/obo/HP_0000478"
+    },
+    {
+     "sub": "http://purl.obolibrary.org/obo/HP_0000545",
+     "pred": "is_a",
+     "obj": "http://purl.obolibrary.org/obo/HP_0000478"
+    },
+    {
+     "sub": "http://purl.obolibrary.org/obo/HP_0033127",
+     "pred": "is_a",
+     "obj": "http://purl.obolibrary.org/obo/HP_0000118"
+    },
+    {
+     "sub": "http://purl.obolibrary.org/obo/HP_0001166",
+     "pred": "is_a",
+     "obj": "http://purl.obolibrary.org/obo/HP_0033127"
+    },
+    {
+     "sub": "http://purl.obolibrary.org/obo/HP_0001519",
+     "pred": "is_a",
+     "obj": "http://purl.obolibrary.org/obo/HP_0033127"
+    },
+    {
+     "sub": "http://purl.obolibrary.org/obo/HP_0002616",
+     "pred": "is_a",
+     "obj": "http://purl.obolibrary.org/obo/HP_0000118"
+    },
+    {
+     "sub": "http://purl.obolibrary.org/obo/HP_0004970",
+     "pred": "is_a",
+     "obj": "http://purl.obolibrary.org/obo/HP_0002616"
+    },
+    {
+     "sub": "http://purl.obolibrary.org/obo/HP_0004970",
+     "pred": "is_a",
+     "obj": "http://purl.obolibrary.org/obo/HP_0033127"
+    }
+   ]
+  }
+ ]
+}
