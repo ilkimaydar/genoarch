@@ -143,7 +143,7 @@ exponentials), and every ranking-defining value (scores, null statistics) is bit
 ## License
 
 Code: MIT ([LICENSE](LICENSE)). Data: this product uses the Human Phenotype Ontology (hpo.jax.org). HPO files
-are used without alteration and their versions are displayed, as the HPO license terms require; cite the HPO as
+are used as downloaded (the index derived from them is described in docs/DATA_CARD.md) and their versions are displayed; cite the HPO as
 the HPO project asks. OMIM and Orphanet content reaches Genoarch through the HPO annotation files; check their
 own terms before any commercial use (not verified here).
 

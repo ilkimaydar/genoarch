@@ -192,9 +192,9 @@
     <h2>Privacy</h2>
     <p>In this page the analysis runs entirely in your browser: the phenotype terms you enter are not sent anywhere. The page loads its typefaces from Google Fonts. When the optional server mode is used, terms are sent to the Genoarch API for the request only and are not stored by the application.</p>
     <h2>Data sources</h2>
-    <p>This product uses the Human Phenotype Ontology (<a href="https://hpo.jax.org">hpo.jax.org</a>). The release versions in use are shown in the page footer and on the Method page. Term labels, synonyms and relationships are used without alteration, as the <a href="https://human-phenotype-ontology.github.io/license.html">HPO license terms</a> require.</p>
+    <p>This product uses the Human Phenotype Ontology (<a href="https://hpo.jax.org">hpo.jax.org</a>). The release versions in use are shown in the page footer and on the Method page. Term labels, synonyms and is_a links are copied unchanged for the Phenotypic abnormality subtree only (19,178 of 19,894 current terms); the Data card lists every change. See the <a href="https://human-phenotype-ontology.github.io/license.html">HPO license terms</a>.</p>
     <ul>
-      <li>Human Phenotype Ontology and HPO annotations, used unchanged.</li>
+      <li>Human Phenotype Ontology and HPO annotations, processed into a derived index (NOT-qualified rows excluded, frequencies pooled, zero-frequency pairs dropped); the Data card lists every change.</li>
       <li>Disease identifiers and names from OMIM, Orphanet and DECIPHER as distributed in the HPO annotation file.</li>
       <li>GA4GH Phenopacket Store, used only to fit and evaluate calibration; no case data is included in this site.</li>
     </ul>
