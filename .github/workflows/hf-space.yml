@@ -1,0 +1,27 @@
+name: Publish static build to the Hugging Face Space
+# Requires a repository secret HF_TOKEN (a Hugging Face token with write access for ilkimaydar).
+on:
+  workflow_dispatch:
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install numpy huggingface_hub
+      - run: python scripts/build_static.py
+      - name: Create or update ilkimaydar/genoarch (sdk static)
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          python - <<'PY'
+          import os
+          from huggingface_hub import HfApi
+          api = HfApi(token=os.environ["HF_TOKEN"])
+          api.create_repo("ilkimaydar/genoarch", repo_type="space", space_sdk="static", exist_ok=True)
+          api.upload_folder(folder_path="dist/hf-space", repo_id="ilkimaydar/genoarch", repo_type="space",
+                            commit_message="Deploy Genoarch static build from GitHub Actions")
+          print("https://huggingface.co/spaces/ilkimaydar/genoarch")
+          PY
